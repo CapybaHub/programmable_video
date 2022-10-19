@@ -13,6 +13,7 @@ class ParticipantViewFactory(createArgsCodec: MessageCodec<Any>, private val plu
     override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
         var videoTrack: VideoTrack? = null
         val params = args as? Map<*, *> ?: throw IllegalStateException("args cannot be null")
+        debug("create => params: ${params}")
 
         if (params["isLocal"] == true) {
             debug("create => constructing local view with params: '${params.values.joinToString(", ")}'")
