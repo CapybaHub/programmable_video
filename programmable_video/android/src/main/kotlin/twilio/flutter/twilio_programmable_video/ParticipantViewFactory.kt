@@ -18,12 +18,21 @@ class ParticipantViewFactory(createArgsCodec: MessageCodec<Any>, private val plu
         if (params["isLocal"] == true) {
             debug("create => constructing local view with params: '${params.values.joinToString(", ")}'")
             val localVideoTrackName = params["name"] as? String ?: ""
+            debug("[isLocal == true][localVideoTrackName]: $localVideoTrackName")
+            var localVideoTrack =  TwilioProgrammableVideoPlugin.getLocalVideoTrack(localVideoTrackName)
+            var localVideoTracks = TwilioProgrammableVideoPlugin.localVideoTracks
+            debug("[localVideoTrack]: $localVideoTrack")
+            debug("[localVideoTracks]: $localVideoTracks")
+            debug("[TwilioProgrammableVideoPlugin]: ${TwilioProgrammableVideoPlugin.Companion.localVideoTracks}")
             if (localVideoTrackName != "" && localVideoTrackName in TwilioProgrammableVideoPlugin.localVideoTracks) {
                 videoTrack = TwilioProgrammableVideoPlugin.localVideoTracks[localVideoTrackName]
+                debug("[videoTrack]: $videoTrack")
             } else {
                 val localParticipant = plugin.getLocalParticipant()
+                debug("[localParticipant]: $localParticipant")
                 if (localParticipant?.localVideoTracks?.isNotEmpty() == true) {
                     videoTrack = localParticipant.localVideoTracks.firstOrNull()?.localVideoTrack
+                    debug("[videoTrack]: $videoTrack")
                 }
             }
         } else {

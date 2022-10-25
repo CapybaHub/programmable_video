@@ -94,6 +94,11 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
     }
 
     fun getLocalParticipant(): LocalParticipant? {
+        var room = TwilioProgrammableVideoPlugin.roomListener.room
+        var localParticipant = TwilioProgrammableVideoPlugin.roomListener.room?.localParticipant
+
+        debug("[getLocalParticipant][room]: ${room}")
+        debug("[getLocalParticipant][localParticipant]: ${localParticipant}")
         return TwilioProgrammableVideoPlugin.roomListener.room?.localParticipant
     }
 
@@ -169,7 +174,10 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
             VideoCapturerHandler.initializeCapturer(videoCapturer, result)
         }
 
+        var localTracksName = TwilioProgrammableVideoPlugin.localVideoTracks[name]
         if (TwilioProgrammableVideoPlugin.localVideoTracks[name] == null) {
+            debug("TwilioProgrammableVideoPlugin.localVideoTracks[name]: $localTracksName")
+            debug("localVideoTrackCreate => inputed name: $name")
             val localVideoTrack = LocalVideoTrack.create(
                 this.applicationContext,
                 enabled,
@@ -181,8 +189,14 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
                 null
             )
 
+            debug("localVideoTrackCreate => created videoTrrack: ${TwilioProgrammableVideoPlugin.getLocalVideoTrack(name)}")
+
             TwilioProgrammableVideoPlugin.localVideoTracks[name]?.release()
             TwilioProgrammableVideoPlugin.localVideoTracks[name] = localVideoTrack
+
+            var localVideoTracks = TwilioProgrammableVideoPlugin.Companion.localVideoTracks
+            debug("[localVideoTracks]: $localVideoTracks")
+            debug("[TwilioProgrammableVideoPlugin]: ${TwilioProgrammableVideoPlugin.Companion}")
         }
         result.success(null)
     }

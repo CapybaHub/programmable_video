@@ -31,6 +31,7 @@ class LocalVideoTrack extends VideoTrack {
   /// Create the local video track.
   Future<void> create() async {
     try {
+      print("Calling create");
       await ProgrammableVideoPlatform.instance.createVideoTrack(_toModel() as LocalVideoTrackModel);
     } on PlatformException catch (err) {
       throw TwilioProgrammableVideo._convertException(err);
@@ -94,10 +95,12 @@ class LocalVideoTrack extends VideoTrack {
   /// If you provide a [key] make sure it is unique among all [VideoTrack]s otherwise Flutter might send the wrong creation params to the native side.
   Widget widget({bool mirror = true, Key? key}) {
     key ??= const ValueKey('Twilio_LocalParticipant');
+    print("[Calling widget][super.name]: ${super.name}");
 
     return ProgrammableVideoPlatform.instance.createLocalVideoTrackWidget(
       mirror: mirror,
       key: key,
+      name: super.name,
     );
   }
 

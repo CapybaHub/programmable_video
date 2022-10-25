@@ -74,6 +74,7 @@ class TwilioProgrammableVideoPlugin : FlutterPlugin {
                 "MI 5"
         )
 
+        @JvmField
         val localVideoTracks = mutableMapOf<String, LocalVideoTrack>()
 
         lateinit var pluginHandler: PluginHandler
@@ -132,6 +133,11 @@ class TwilioProgrammableVideoPlugin : FlutterPlugin {
         @JvmStatic
         internal fun isConnected(): Boolean {
             return ::roomListener.isInitialized && roomListener.room != null
+        }
+
+        @JvmStatic
+        fun getLocalVideoTrack(name: String) : LocalVideoTrack? {
+            return localVideoTracks[name];   
         }
     }
 
