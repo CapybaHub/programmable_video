@@ -193,6 +193,7 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
 
             TwilioProgrammableVideoPlugin.localVideoTracks[name]?.release()
             TwilioProgrammableVideoPlugin.localVideoTracks[name] = localVideoTrack
+            TwilioProgrammableVideoPlugin.applicationContext = this.applicationContext
 
             var localVideoTracks = TwilioProgrammableVideoPlugin.Companion.localVideoTracks
             debug("[localVideoTracks]: $localVideoTracks")

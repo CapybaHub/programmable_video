@@ -544,8 +544,10 @@ public class PluginHandler: BaseListener {
         if SwiftTwilioProgrammableVideoPlugin.audioDevice == nil {
             SwiftTwilioProgrammableVideoPlugin.audioDevice = DefaultAudioDevice()
             DefaultAudioDevice.DefaultAVAudioSessionConfigurationBlock()
+            debug("[initializeAudioDevice][SwiftTwilioProgrammableVideoPlugin.audioDevice] => \(SwiftTwilioProgrammableVideoPlugin.audioDevice)")
         }
-        TwilioVideoSDK.audioDevice = SwiftTwilioProgrammableVideoPlugin.audioDevice!
+        // TwilioVideoSDK.audioDevice = SwiftTwilioProgrammableVideoPlugin.audioDevice!
+        debug("[initializeAudioDevice][TwilioVideoSDK.audioDevice] => \(TwilioVideoSDK.audioDevice)")
     }
 
     private func checkForActiveCalls() throws {
@@ -588,8 +590,14 @@ public class PluginHandler: BaseListener {
             return result(FlutterError(code: "ACTIVE_CALL", message: "Detected an active call that is using the audio system.", details: nil))
         }
 
-        // Override the device before creating any Rooms or Tracks.
-        initializeAudioDevice()
+        do {
+            // Override the device before creating any Rooms or Tracks.
+            try initializeAudioDevice()             
+        } catch {
+            debug("connect => detected an active audioDevice that is preventing activation of the AVAudioSession")
+            return result(FlutterError(code: "AUDIO_DEVICE_INITIALIZATION_FAILURE", message: "Failed to inititialize audio device", details: nil))
+        }
+        
 
         let connectOptions = ConnectOptions(token: accessToken) { (builder) in
             // Set the room name if it has been passed.

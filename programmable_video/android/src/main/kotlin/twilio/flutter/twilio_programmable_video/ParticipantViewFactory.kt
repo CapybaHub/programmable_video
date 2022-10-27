@@ -1,6 +1,7 @@
 package twilio.flutter.twilio_programmable_video
 
 import android.content.Context
+import com.twilio.video.LocalVideoTrack
 import com.twilio.video.VideoTrack
 import com.twilio.video.VideoView
 import io.flutter.plugin.common.MessageCodec
@@ -24,8 +25,14 @@ class ParticipantViewFactory(createArgsCodec: MessageCodec<Any>, private val plu
             debug("[localVideoTrack]: $localVideoTrack")
             debug("[localVideoTracks]: $localVideoTracks")
             debug("[TwilioProgrammableVideoPlugin]: ${TwilioProgrammableVideoPlugin.Companion.localVideoTracks}")
-            if (localVideoTrackName != "" && localVideoTrackName in TwilioProgrammableVideoPlugin.localVideoTracks) {
-                videoTrack = TwilioProgrammableVideoPlugin.localVideoTracks[localVideoTrackName]
+            debug("[TwilioProgrammableVideoPlugin.cameraCapturer]: ${TwilioProgrammableVideoPlugin.cameraCapturer}")
+            if (localVideoTrackName != "") {
+                videoTrack = if(TwilioProgrammableVideoPlugin.localVideoTracks[localVideoTrackName] != null) TwilioProgrammableVideoPlugin.localVideoTracks[localVideoTrackName] else   LocalVideoTrack.create(
+                    TwilioProgrammableVideoPlugin.applicationContext,
+                    true,
+                    TwilioProgrammableVideoPlugin.cameraCapturer!!,
+                    localVideoTrackName,
+                )
                 debug("[videoTrack]: $videoTrack")
             } else {
                 val localParticipant = plugin.getLocalParticipant()
