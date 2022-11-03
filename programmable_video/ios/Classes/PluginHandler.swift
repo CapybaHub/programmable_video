@@ -688,8 +688,10 @@ public class PluginHandler: BaseListener {
                 }
                 self.debug("connect => setting dataTracks to '\(dataTracks)'")
                 builder.dataTracks = dataTracks
+                self.debug("connect => builder.dataTracks '\(builder.dataTracks)'")
             }
 
+            self.debug("connect => optionsObj['videoTracks'] '\(optionsObj["videoTracks"])'")
             // Set the local video tracks if it has been passed.
             if let videoTrackOptions = optionsObj["videoTracks"] as? [AnyHashable: [String: Any]] {
                 var videoTracks: [LocalVideoTrack] = []
@@ -714,12 +716,20 @@ public class PluginHandler: BaseListener {
 
                         let videoSource = CameraSource()!
 
+                        self.debug("connect => [SwiftTwilioProgrammableVideoPlugin.localVideoTracks] '\(SwiftTwilioProgrammableVideoPlugin.localVideoTracks[name ?? ""])'")
+
                         if let localVideoTrack = SwiftTwilioProgrammableVideoPlugin.localVideoTracks[name ?? ""] {
+
                             videoTracks.append(localVideoTrack)
-                            SwiftTwilioProgrammableVideoPlugin.localVideoTracks.removeValue(forKey: name ?? "")
+                            // SwiftTwilioProgrammableVideoPlugin.localVideoTracks.removeValue(forKey: name ?? "")
+                            // self.debug("connect => [SwiftTwilioProgrammableVideoPlugin.localVideoTracks] if")
+
                         } else {
                             videoTracks.append(LocalVideoTrack(source: videoSource, enabled: enable ?? true, name: name ?? nil)!)
+                            self.debug("connect => [SwiftTwilioProgrammableVideoPlugin.localVideoTracks] else")
                         }
+
+                        self.debug("connect => [SwiftTwilioProgrammableVideoPlugin.localVideoTracks] '\(SwiftTwilioProgrammableVideoPlugin.localVideoTracks[name ?? ""])'")
 
                         videoSource.startCapture(device: cameraDevice) { (device: AVCaptureDevice, _: VideoFormat, error: Error?) in
                             if let error = error {
