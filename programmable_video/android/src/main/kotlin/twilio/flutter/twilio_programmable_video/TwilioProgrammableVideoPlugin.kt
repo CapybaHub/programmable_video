@@ -6,6 +6,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.NonNull
 import com.twilio.video.LocalVideoTrack
+import com.twilio.video.Room
 import com.twilio.video.Video
 import com.twilio.video.VideoCapturer
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -83,6 +84,8 @@ class TwilioProgrammableVideoPlugin : FlutterPlugin {
 
         lateinit var roomListener: RoomListener
 
+        lateinit var room: Room
+
         lateinit var applicationContext: Context
 
         // Default to false as Camera1Capturer and Camera1Enumator seem to work alright
@@ -139,7 +142,7 @@ class TwilioProgrammableVideoPlugin : FlutterPlugin {
 
         @JvmStatic
         fun getLocalVideoTrack(name: String) : LocalVideoTrack? {
-            return localVideoTracks[name];   
+            return localVideoTracks[name]
         }
     }
 

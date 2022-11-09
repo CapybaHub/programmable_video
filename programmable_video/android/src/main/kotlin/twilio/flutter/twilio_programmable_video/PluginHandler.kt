@@ -12,28 +12,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.NonNull
-import com.twilio.video.AudioCodec
-import com.twilio.video.Camera2Capturer
-import com.twilio.video.CameraCapturer
-import com.twilio.video.ConnectOptions
-import com.twilio.video.DataTrackOptions
-import com.twilio.video.G722Codec
-import com.twilio.video.H264Codec
-import com.twilio.video.IsacCodec
-import com.twilio.video.LocalAudioTrack
-import com.twilio.video.LocalDataTrack
-import com.twilio.video.LocalParticipant
-import com.twilio.video.LocalVideoTrack
-import com.twilio.video.NetworkQualityConfiguration
-import com.twilio.video.NetworkQualityVerbosity
-import com.twilio.video.OpusCodec
-import com.twilio.video.PcmaCodec
-import com.twilio.video.PcmuCodec
-import com.twilio.video.RemoteAudioTrackPublication
-import com.twilio.video.RemoteParticipant
-import com.twilio.video.VideoCodec
-import com.twilio.video.Vp8Codec
-import com.twilio.video.Vp9Codec
+import com.twilio.video.*
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
@@ -656,8 +635,12 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
 
             applyAudioSettings()
 
+
+
             val roomId = 1 // Future preparation, for when we might want to support multiple rooms.
-            TwilioProgrammableVideoPlugin.roomListener = RoomListener(roomId, optionsBuilder.build())
+            val roomListener: RoomListener = RoomListener(roomId, optionsBuilder.build())
+            TwilioProgrammableVideoPlugin.roomListener = roomListener
+            TwilioProgrammableVideoPlugin.room = Video.connect(applicationContext, optionsBuilder.build(),  roomListener)
             result.success(roomId)
         } catch (e: Exception) {
             result.error("INIT_ERROR", e.toString(), e)
