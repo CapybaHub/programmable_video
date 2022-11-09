@@ -16,13 +16,11 @@ dependencies:
   enum_to_string: ^2.0.1
   twilio_programmable_video_platform_interface:
     git:
-      url: https://github.com/CapybaHub/twilio_programmable_video.git
-      path: programmable_video_platform_interface
+      url: https://github.com/CapybaHub/programmable_video_platform_interface.git
     # path: ../programmable_video_platform_interface
   twilio_programmable_video_web:
     git:
-      url: https://github.com/CapybaHub/twilio_programmable_video.git
-      path: programmable_video_web
+      url: https://github.com/CapybaHub/programmable_video_web.git
     # path: ../programmable_video_web
   collection: ^1.15.0
 
