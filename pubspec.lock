@@ -479,20 +479,16 @@ packages:
   twilio_programmable_video_platform_interface:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "6ebd71a12eca2021ef39a8b51612b4497a5ebc0a"
-      url: "https://github.com/CapybaHub/programmable_video_platform_interface.git"
-    source: git
+      path: "/Users/silaspedrosa/Workspace/programmable_video_platform_interface"
+      relative: false
+    source: path
     version: "1.0.0"
   twilio_programmable_video_web:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: e5b75701911c91cc82ab15448cbaa773277df83e
-      url: "https://github.com/CapybaHub/programmable_video_web.git"
-    source: git
+      path: "/Users/silaspedrosa/Workspace/programmable_video_web"
+      relative: false
+    source: path
     version: "1.0.0"
   typed_data:
     dependency: transitive

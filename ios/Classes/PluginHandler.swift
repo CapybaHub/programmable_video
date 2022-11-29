@@ -426,10 +426,11 @@ public class PluginHandler: BaseListener {
             return result(FlutterError(code: "MISSING_PARAMS", message: missingParameterMessage("bluetoothPreferred"), details: nil))
         }
 
-        initializeAudioDevice()
-        SwiftTwilioProgrammableVideoPlugin.audioNotificationListener.listenForRouteChanges()
+        
 
         do {
+            try initializeAudioDevice()
+            SwiftTwilioProgrammableVideoPlugin.audioNotificationListener.listenForRouteChanges()
             audioSettings.speakerEnabled = speakerphoneEnabled
             audioSettings.bluetoothPreferred = bluetoothPreferred
 
@@ -488,9 +489,10 @@ public class PluginHandler: BaseListener {
             return result(FlutterError(code: "MISSING_PARAMS", message: missingParameterMessage("on"), details: nil))
         }
 
-        initializeAudioDevice()
+      
 
         do {
+            try initializeAudioDevice()
             audioSettings.speakerEnabled = on
 
             let audioSession = AVAudioSession.sharedInstance()
@@ -540,11 +542,11 @@ public class PluginHandler: BaseListener {
         }
     }
 
-    private func initializeAudioDevice() {
+    private func initializeAudioDevice() throws {
         if SwiftTwilioProgrammableVideoPlugin.audioDevice == nil {
             SwiftTwilioProgrammableVideoPlugin.audioDevice = DefaultAudioDevice()
             DefaultAudioDevice.DefaultAVAudioSessionConfigurationBlock()
-            debug("[initializeAudioDevice][SwiftTwilioProgrammableVideoPlugin.audioDevice] => \(SwiftTwilioProgrammableVideoPlugin.audioDevice)")
+            debug("[initializeAudioDevice][SwiftTwilioProgrammableVideoPlugin.audioDevice] => \(String(describing: SwiftTwilioProgrammableVideoPlugin.audioDevice))")
         }
         // TwilioVideoSDK.audioDevice = SwiftTwilioProgrammableVideoPlugin.audioDevice!
         debug("[initializeAudioDevice][TwilioVideoSDK.audioDevice] => \(TwilioVideoSDK.audioDevice)")
@@ -691,7 +693,7 @@ public class PluginHandler: BaseListener {
                 self.debug("connect => builder.dataTracks '\(builder.dataTracks)'")
             }
 
-            self.debug("connect => optionsObj['videoTracks'] '\(optionsObj["videoTracks"])'")
+            self.debug("connect => optionsObj['videoTracks'] '\(String(describing: optionsObj["videoTracks"]))'")
             // Set the local video tracks if it has been passed.
             if let videoTrackOptions = optionsObj["videoTracks"] as? [AnyHashable: [String: Any]] {
                 var videoTracks: [LocalVideoTrack] = []
@@ -716,13 +718,13 @@ public class PluginHandler: BaseListener {
 
                         let videoSource = CameraSource()!
 
-                        self.debug("connect => [SwiftTwilioProgrammableVideoPlugin.localVideoTracks] '\(SwiftTwilioProgrammableVideoPlugin.localVideoTracks[name ?? ""])'")
+                        self.debug("connect => [SwiftTwilioProgrammableVideoPlugin.localVideoTracks] '\(String(describing: SwiftTwilioProgrammableVideoPlugin.localVideoTracks[name ?? ""]))'")
 
                         if let localVideoTrack = SwiftTwilioProgrammableVideoPlugin.localVideoTracks[name ?? ""] {
 
                             videoTracks.append(localVideoTrack)
-                            // SwiftTwilioProgrammableVideoPlugin.localVideoTracks.removeValue(forKey: name ?? "")
-                            // self.debug("connect => [SwiftTwilioProgrammableVideoPlugin.localVideoTracks] if")
+//                             SwiftTwilioProgrammableVideoPlugin.localVideoTracks.removeValue(forKey: name ?? "")
+                             self.debug("connect => [SwiftTwilioProgrammableVideoPlugin.localVideoTracks] if")
 
                         } else {
                             videoTracks.append(LocalVideoTrack(source: videoSource, enabled: enable ?? true, name: name ?? nil)!)
@@ -731,14 +733,14 @@ public class PluginHandler: BaseListener {
 
                         self.debug("connect => [SwiftTwilioProgrammableVideoPlugin.localVideoTracks] '\(SwiftTwilioProgrammableVideoPlugin.localVideoTracks[name ?? ""])'")
 
-                        videoSource.startCapture(device: cameraDevice) { (device: AVCaptureDevice, _: VideoFormat, error: Error?) in
-                            if let error = error {
-                                self.sendEvent("cameraError", data: ["capturer": self.videoSourceToDict(SwiftTwilioProgrammableVideoPlugin.cameraSource, newCameraSource: nil)], error: error)
-                            } else {
-                                self.sendEvent("firstFrameAvailable", data: ["capturer": self.videoSourceToDict(SwiftTwilioProgrammableVideoPlugin.cameraSource, newCameraSource: device.position)], error: nil)
-                            }
-                        }
-                        SwiftTwilioProgrammableVideoPlugin.cameraSource = videoSource
+//                        videoSource.startCapture(device: cameraDevice) { (device: AVCaptureDevice, _: VideoFormat, error: Error?) in
+//                            if let error = error {
+//                                self.sendEvent("cameraError", data: ["capturer": self.videoSourceToDict(SwiftTwilioProgrammableVideoPlugin.cameraSource, newCameraSource: nil)], error: error)
+//                            } else {
+//                                self.sendEvent("firstFrameAvailable", data: ["capturer": self.videoSourceToDict(SwiftTwilioProgrammableVideoPlugin.cameraSource, newCameraSource: device.position)], error: nil)
+//                            }
+//                        }
+//                        SwiftTwilioProgrammableVideoPlugin.cameraSource = videoSource
                     }
                 }
                 self.debug("connect => setting videoTracks to '\(videoTracks)'")

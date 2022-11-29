@@ -153,10 +153,7 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
             VideoCapturerHandler.initializeCapturer(videoCapturer, result)
         }
 
-        var localTracksName = TwilioProgrammableVideoPlugin.localVideoTracks[name]
         if (TwilioProgrammableVideoPlugin.localVideoTracks[name] == null) {
-            debug("TwilioProgrammableVideoPlugin.localVideoTracks[name]: $localTracksName")
-            debug("localVideoTrackCreate => inputed name: $name")
             val localVideoTrack = LocalVideoTrack.create(
                 this.applicationContext,
                 enabled,
@@ -190,6 +187,7 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
         debug("localVideoTrackEnable => called for $localVideoTrackName, enable=$localVideoTrackEnable")
 
         val localVideoTrack = getLocalParticipant()?.localVideoTracks?.firstOrNull { it.trackName == localVideoTrackName }
+        debug("[localVideoTrackEnable][localVideoTrack]: $localVideoTrack")
         if (localVideoTrack != null) {
             localVideoTrack.localVideoTrack.enable(localVideoTrackEnable)
             return result.success(null)
@@ -202,13 +200,14 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
                 ?: return result.error("MISSING_PARAMS", missingParameterMessage("name"), null)
 
         debug("localVideoTrackPublish => called for $localVideoTrackName")
+        debug("[TwilioProgrammableVideoPlugin.localVideoTracks]: ${TwilioProgrammableVideoPlugin.localVideoTracks}")
 
         val localVideoTrack = TwilioProgrammableVideoPlugin.localVideoTracks[localVideoTrackName]
                 ?: return result.error("NOT_FOUND", "No LocalVideoTrack found with the name '$localVideoTrackName'", null)
 
         getLocalParticipant()?.publishTrack(localVideoTrack)
 
-        TwilioProgrammableVideoPlugin.localVideoTracks -= localVideoTrackName
+//        TwilioProgrammableVideoPlugin.localVideoTracks -= localVideoTrackName
 
         return result.success(null)
     }
@@ -231,6 +230,39 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
 
         return result.success(null)
     }
+
+
+    
+//     private fun removeCameraTrack() {
+//        cameraVideoTrack?.let { cameraVideoTrack ->
+//            unpublishTrack(cameraVideoTrack)
+//            localVideoTrackNames.remove(cameraVideoTrack.name)
+//            cameraVideoTrack.release()
+//            this.cameraVideoTrack = null
+//        }
+//    }
+//
+//    private fun setupLocalVideoTrack() {
+//        val dimensionsIndex = sharedPreferences.get(VIDEO_CAPTURE_RESOLUTION,
+//                VIDEO_CAPTURE_RESOLUTION_DEFAULT).toInt()
+//        val videoFormat = VideoFormat(VIDEO_DIMENSIONS[dimensionsIndex], 30)
+//
+//        cameraCapturer = CameraCapturerCompat.newInstance(context)
+//        cameraVideoTrack = cameraCapturer?.let { cameraCapturer ->
+//            LocalVideoTrack.create(
+//                    context,
+//                    true,
+//                    cameraCapturer,
+//                    videoFormat,
+//                    CAMERA_TRACK_NAME)
+//        }
+//        cameraVideoTrack?.let { cameraVideoTrack ->
+//            localVideoTrackNames[cameraVideoTrack.name] = context.getString(R.string.camera_video_track)
+//            publishCameraTrack(cameraVideoTrack)
+//        } ?: run {
+//            Timber.e(RuntimeException(), "Failed to create the local camera video track")
+//        }
+//    }
 
     private fun localVideoTrackRelease(call: MethodCall, result: MethodChannel.Result) {
         val localVideoTrackName = call.argument<String>("name")
@@ -619,7 +651,7 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
                     if (TwilioProgrammableVideoPlugin.cameraCapturer != null) {
                         if (name in TwilioProgrammableVideoPlugin.localVideoTracks) {
                             videoTracks.add(TwilioProgrammableVideoPlugin.localVideoTracks[name])
-                            TwilioProgrammableVideoPlugin.localVideoTracks -= name
+//                            TwilioProgrammableVideoPlugin.localVideoTracks -= name
                         } else {
                             videoTracks.add(LocalVideoTrack.create(this.applicationContext, videoTrack["enable"] as Boolean, TwilioProgrammableVideoPlugin.cameraCapturer!!, videoTrack["name"] as String))
                         }
@@ -635,12 +667,11 @@ class PluginHandler : MethodCallHandler, ActivityAware, BaseListener {
 
             applyAudioSettings()
 
-
-
             val roomId = 1 // Future preparation, for when we might want to support multiple rooms.
             val roomListener: RoomListener = RoomListener(roomId, optionsBuilder.build())
             TwilioProgrammableVideoPlugin.roomListener = roomListener
-            TwilioProgrammableVideoPlugin.room = Video.connect(applicationContext, optionsBuilder.build(),  roomListener)
+
+//            TwilioProgrammableVideoPlugin.room = Video.connect(applicationContext, optionsBuilder.build(),  roomListener)
             result.success(roomId)
         } catch (e: Exception) {
             result.error("INIT_ERROR", e.toString(), e)

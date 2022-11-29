@@ -13,12 +13,16 @@ class LocalVideoTrack extends VideoTrack {
   /// Retrieves the [VideoCapturer].
   VideoCapturer get videoCapturer => _videoCapturer;
 
-  LocalVideoTrack(enabled, this._videoCapturer, {String name = ''}) : super(enabled, name);
+  LocalVideoTrack(enabled, this._videoCapturer, {String name = ''})
+      : super(enabled, name);
 
   /// Construct from a [LocalVideoTrackModel].
   factory LocalVideoTrack._fromModel(LocalVideoTrackModel model) {
-    var videoCapturer = model.cameraCapturer.type == 'CameraCapturer' ? CameraCapturer._fromModel(model.cameraCapturer) : throw Exception('Received unknown VideoCapturer');
-    var localVideoTrack = LocalVideoTrack(model.enabled, videoCapturer, name: model.name);
+    var videoCapturer = model.cameraCapturer.type == 'CameraCapturer'
+        ? CameraCapturer._fromModel(model.cameraCapturer)
+        : throw Exception('Received unknown VideoCapturer');
+    var localVideoTrack =
+        LocalVideoTrack(model.enabled, videoCapturer, name: model.name);
     localVideoTrack._updateFromModel(model);
     return localVideoTrack;
   }
@@ -31,8 +35,8 @@ class LocalVideoTrack extends VideoTrack {
   /// Create the local video track.
   Future<void> create() async {
     try {
-      print("Calling create");
-      await ProgrammableVideoPlatform.instance.createVideoTrack(_toModel() as LocalVideoTrackModel);
+      await ProgrammableVideoPlatform.instance
+          .createVideoTrack(_toModel() as LocalVideoTrackModel);
     } on PlatformException catch (err) {
       throw TwilioProgrammableVideo._convertException(err);
     }
@@ -47,6 +51,7 @@ class LocalVideoTrack extends VideoTrack {
   /// Throws [NotFoundException] if no track is found by the name provided (probably means you haven't connected).
   Future<void> enable(bool enabled) async {
     try {
+      print("[Calling Enable for track with name]: $name");
       await ProgrammableVideoPlatform.instance.enableVideoTrack(enabled, name);
       _enabled = enabled;
     } on PlatformException catch (err) {
@@ -110,7 +115,8 @@ class LocalVideoTrack extends VideoTrack {
     return LocalVideoTrackModel(
       enabled: _enabled,
       name: name,
-      cameraCapturer: CameraCapturerModel(cameraCapturer.source, 'CameraCapturer'),
+      cameraCapturer:
+          CameraCapturerModel(cameraCapturer.source, 'CameraCapturer'),
     );
   }
 }
