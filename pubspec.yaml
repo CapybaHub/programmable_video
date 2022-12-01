@@ -17,10 +17,12 @@ dependencies:
   twilio_programmable_video_platform_interface:
     git:
       url: https://github.com/CapybaHub/programmable_video_platform_interface.git
+      branch: debuging
     # path: /Users/silaspedrosa/Workspace/programmable_video_platform_interface
   twilio_programmable_video_web:
     git:
       url: https://github.com/CapybaHub/programmable_video_web.git
+      branch: debuging
     # path: /Users/silaspedrosa/Workspace/programmable_video_web
   collection: ^1.15.0
 
