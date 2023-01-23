@@ -337,14 +337,14 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.2.0"
+    version: "10.2.0"
   permission_handler_android:
     dependency: transitive
     description:
       name: permission_handler_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.0.2+1"
+    version: "10.2.0"
   permission_handler_apple:
     dependency: transitive
     description:
@@ -479,16 +479,20 @@ packages:
   twilio_programmable_video_platform_interface:
     dependency: "direct main"
     description:
-      path: "/Users/silaspedrosa/Workspace/programmable_video_platform_interface"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "6ebd71a12eca2021ef39a8b51612b4497a5ebc0a"
+      url: "https://github.com/CapybaHub/programmable_video_platform_interface.git"
+    source: git
     version: "1.0.0"
   twilio_programmable_video_web:
     dependency: "direct main"
     description:
-      path: "/Users/silaspedrosa/Workspace/programmable_video_web"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: ede46eca93e48fbadc1ce755810337800afdbff2
+      url: "https://github.com/CapybaHub/programmable_video_web.git"
+    source: git
     version: "1.0.0"
   typed_data:
     dependency: transitive
